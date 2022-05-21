@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponAmmo : MonoBehaviour
+public abstract class WeaponAmmo : MonoBehaviour
 {
     protected float _lifespan;
     protected float _speed;
@@ -21,24 +21,23 @@ public class WeaponAmmo : MonoBehaviour
         Move();
     }
 
-    protected void Move()
-    {
-        transform.Translate(Vector3.forward * _speed * Time.fixedDeltaTime);
-    }
     protected void OnCollisionEnter(Collision collision)
     {
-        bool t = collision.gameObject.GetComponent<Player>() != null;
-        //Debug.Log(t);
-        Debug.Log(TryGetComponent(out _target)); //не находит родительский класс, почему?
-
-        if (TryGetComponent(out _target))
+        _target = collision.gameObject.GetComponent<Character>();
+        //collision.gameObject.GetType().BaseType.IsAssignableFrom(typeof(Character)) - не проверяет на наследование от базового класса, от любого коллайдера возвращает true
+        if (_target != null) 
         {
             DoDamage();
             Destroy(gameObject);
         }
     }
 
-    private void DoDamage()
+    protected void Move()
+    {
+        transform.Translate(Vector3.forward * _speed * Time.fixedDeltaTime);
+    }
+
+    protected void DoDamage()
     {
         _target.Guard -= _damage;
         if (_target.Guard < 0)
@@ -46,5 +45,6 @@ public class WeaponAmmo : MonoBehaviour
             _target.Health += _target.Guard;
             _target.Guard = 0;
         }
+        _target = null;
     }
 }

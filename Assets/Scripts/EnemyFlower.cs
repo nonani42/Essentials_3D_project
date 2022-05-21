@@ -7,48 +7,36 @@ public class EnemyFlower : Character
 {
     [SerializeField] private Transform _spawnWeaponPoint;
     private Transform[] _waypoints;
+    private int _waypointIndex;
     private ObjManager manager;
     private GameObject _player;
 
-    private bool _hasTarget;
     private Vector3 _direction;
     private Vector3 _stepDirection;
+    private float _rotationSpeed;
 
     private float _speed;
 
-    private float _rotationSpeed;
+    private bool _hasTarget;
     private float _timeToNextShot;
     private float _fireRate;
 
-    private int _waypointIndex;
 
 
     private void Awake()
     {
         manager = FindObjectOfType<ObjManager>();
         _player = ObjManager.FindPlayer();
-        Health = 10f;
+        Health = 15f;
         Guard = 0f;
-        _speed = 5f;
+        _speed = 4f;
         _rotationSpeed = 100f;
 
         _hasTarget = false;
-        _fireRate = 1f;
+        _fireRate = 0.5f;
 
         _waypointIndex = 0;
         FindPatrolPoints();
-    }
-
-    private void FindPatrolPoints()
-    {
-        Transform[] temp;
-        temp = GameObject.Find("Waypoints").GetComponentsInChildren<Transform>();
-        _waypoints = new Transform[temp.Length - 1];
-        for(int i = 1; i< temp.Length; i++)
-        {
-            _waypoints[i - 1] = temp[i];
-        }
-        Debug.Log(_waypoints.Length);
     }
 
     private void Start()
@@ -62,7 +50,7 @@ public class EnemyFlower : Character
 
     private void FixedUpdate()
     {
-        if (_hasTarget)
+        if (_hasTarget && _player != null)
         {
             Aim();
             Fire();
@@ -79,13 +67,12 @@ public class EnemyFlower : Character
             _waypointIndex = 0;
         }
         _direction = _waypoints[_waypointIndex].position - transform.position;
-        transform.Translate(_direction.normalized * _speed * Time.fixedDeltaTime); //этим задаем вектор движения
-        if (_direction != Vector3.zero)//если движемся
+        transform.Translate(_direction.normalized * _speed * Time.fixedDeltaTime, Space.World); //этим задаем вектор движения
+        transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, _direction, _rotationSpeed * Time.fixedDeltaTime, 0f));
+        if ((transform.position - _waypoints[_waypointIndex].position).sqrMagnitude < 1f)
         {
-            Quaternion toRotation = Quaternion.LookRotation(_direction, Vector3.up); //получаем кватернион куда поворачиваться
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.fixedDeltaTime); //этим задаем поворот в сторону движения
+            _waypointIndex++;
         }
-        _waypointIndex++;
         //if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
         //{
         //    _waypointIndex = (_waypointIndex + 1) % _waypoints.Length;
@@ -106,6 +93,17 @@ public class EnemyFlower : Character
         if (other.gameObject == _player)
         {
             _hasTarget = false;
+        }
+    }
+
+    private void FindPatrolPoints()
+    {
+        Transform[] temp;
+        temp = GameObject.Find("Waypoints").GetComponentsInChildren<Transform>();
+        _waypoints = new Transform[temp.Length - 1];
+        for(int i = 1; i< temp.Length; i++)
+        {
+            _waypoints[i - 1] = temp[i];
         }
     }
 

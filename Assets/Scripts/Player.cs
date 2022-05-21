@@ -8,7 +8,7 @@ public class Player : Character
     private void Awake()
     {
         Health = 10f;
-        Guard = 0f;
+        Guard = 10f;
     }
     void Start()
     {

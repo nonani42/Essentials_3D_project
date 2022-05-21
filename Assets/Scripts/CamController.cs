@@ -24,7 +24,10 @@ public class CamController : MonoBehaviour
     }
     private void LateUpdate()
     {
-        FollowPlayer();
+        if(_player != null)
+        {
+            FollowPlayer();
+        }
     }
 
     private void FollowPlayer()
