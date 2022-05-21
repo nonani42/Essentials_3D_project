@@ -1195,6 +1195,7 @@ MonoBehaviour:
   _player: {fileID: 7903769432293257619, guid: d839e74c37b7d8247a27c164152a098e, type: 3}
   _enemy: {fileID: 424631506070080676, guid: 32733f538aebac143be20f6a6d36bdca, type: 3}
   _snowball: {fileID: 5547212943994571470, guid: 19e6134cd111bda4f816e627a998b938, type: 3}
+  _suriken: {fileID: 8957334205258426688, guid: 8537faa74c92cc24b9ac305a74078b97, type: 3}
   _playerPoint: {fileID: 640896088}
   _enemyPoint: {fileID: 832353922}
 --- !u!4 &1271682503

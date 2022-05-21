@@ -1031,6 +1031,7 @@ GameObject:
   - component: {fileID: 7903769432293257621}
   - component: {fileID: 7903769432293257622}
   - component: {fileID: 5900122751354033674}
+  - component: {fileID: 928845803135733176}
   m_Layer: 0
   m_Name: Snowman
   m_TagString: Untagged
@@ -1065,8 +1066,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e26aff8dfd0b69e4b8fd442d2eca1875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 0
-  _spawnWeaponPoint: {fileID: 4908463738255169348}
 --- !u!54 &7903769432293257622
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1097,6 +1096,20 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1.03, z: 0}
+--- !u!114 &928845803135733176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7903769432293257619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f64d2a2635f1d04d97b9f6764078363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawnWeaponPoint: {fileID: 4908463738255169348}
+  rotationSpeed: 0
 --- !u!1 &7903769433015033201
 GameObject:
   m_ObjectHideFlags: 0

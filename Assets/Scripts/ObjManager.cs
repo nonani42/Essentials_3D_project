@@ -10,6 +10,7 @@ class ObjManager : MonoBehaviour
     [SerializeField] GameObject _player;
     [SerializeField] GameObject _enemy;
     [SerializeField] GameObject _snowball;
+    [SerializeField] GameObject _suriken;
     [SerializeField] Transform _playerPoint;
     [SerializeField] Transform _enemyPoint;
     static Dictionary<Tags, GameObject> _prefabsDic;
@@ -30,6 +31,8 @@ class ObjManager : MonoBehaviour
         _prefabsDic.Add(Tags.player, _player);
         _prefabsDic.Add(Tags.enemy, _enemy);
         _prefabsDic.Add(Tags.snowball, _snowball);
+        _prefabsDic.Add(Tags.suriken, _suriken);
+
     }
 
     public void Spawn(Tags tag, Transform position)
@@ -78,5 +81,6 @@ public enum Tags
 {
     player,
     enemy,
-    snowball
+    snowball,
+    suriken
 }
