@@ -5,20 +5,20 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] Transform _spawnWeaponPoint;
-    ObjManager manager;
-    Transform camTransform;
+    [SerializeField] private Transform _spawnWeaponPoint;
+    private ObjManager manager;
+    private Transform camTransform;
+    private Rigidbody _rb;
 
-    float _speed;
-    float _sprint;
-    float _jumpHeight;
-    bool _isHighJump;
+    private float _speed;
+    private float _sprint;
+    private float _jumpHeight;
 
-    Vector3 _direction;
-    Vector3 _camPosition;
-    Vector3 _camDirection;
-    Vector3 _horizontalInput;
-    Vector3 _verticalInput;
+    private Vector3 _direction;
+    private Vector3 _camPosition;
+    private Vector3 _camDirection;
+    private Vector3 _horizontalInput;
+    private Vector3 _verticalInput;
 
     public float rotationSpeed;
 
@@ -26,11 +26,11 @@ public class PlayerController : MonoBehaviour
     {
         manager = FindObjectOfType<ObjManager>();
         camTransform = FindObjectOfType<CamController>().transform;
+        _rb = GetComponent<Rigidbody>();
         rotationSpeed = 720f;
         _speed = 5f;
         _sprint = 1f;
-        _jumpHeight = 1f;
-        _isHighJump = false;
+        _jumpHeight = 240f;
     }
     public void Update()
     {
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         Walk();
         CheckSprint();
-        CheckJumpHeight(); //сейчас не зависит от логики
+        //UseRaycast();
     }
 
     private void Walk()
@@ -51,12 +51,26 @@ public class PlayerController : MonoBehaviour
         _horizontalInput = camTransform.right * Input.GetAxis("Horizontal");
         _verticalInput = _camDirection * Input.GetAxis("Vertical");
         _direction = _horizontalInput + _verticalInput;
-        transform.Translate(_direction.normalized * _speed * _sprint * Time.fixedDeltaTime, Space.World); //этим задаем вектор движения
-        if (_direction != Vector3.zero)//если движемся
+        _rb.MovePosition(transform.position + _direction.normalized * _speed * _sprint * Time.fixedDeltaTime);
+        if (_direction != Vector3.zero)
         {
-            Quaternion toRotation = Quaternion.LookRotation(_direction, Vector3.up); //получаем кватернион куда поворачиваться
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime); //этим задаем поворот в сторону движения
+            Quaternion toRotation = Quaternion.LookRotation(_direction * rotationSpeed * Time.fixedDeltaTime, Vector3.up);
+            _rb.MoveRotation(toRotation);
+            
         }
+        #region Movement without Rigidbody
+        //_camPosition = new Vector3(camTransform.position.x, transform.position.y, camTransform.position.z); //без учета высоты камеры
+        //_camDirection = transform.position - _camPosition; //убираем наклон игрока из-за наклона камеры
+        //_horizontalInput = camTransform.right * Input.GetAxis("Horizontal");
+        //_verticalInput = _camDirection * Input.GetAxis("Vertical");
+        //_direction = _horizontalInput + _verticalInput;
+        //transform.Translate(_direction.normalized * _speed * _sprint * Time.fixedDeltaTime, Space.World); //этим задаем вектор движения
+        //if (_direction != Vector3.zero)//если движемся
+        //{
+        //    Quaternion toRotation = Quaternion.LookRotation(_direction, Vector3.up); //получаем кватернион куда поворачиваться
+        //    transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime); //этим задаем поворот в сторону движения
+        //}
+        #endregion
     }
 
     public void Fire()
@@ -72,16 +86,25 @@ public class PlayerController : MonoBehaviour
         _sprint = Input.GetButton("Sprint") ? 2f : 1f;
     }
 
-    private void CheckJumpHeight()
-    {
-        _jumpHeight = _isHighJump ? 2f : 1f;
-    }
-
     private void Jump()
     {
         if (Input.GetButtonDown("Jump"))
         {
-            transform.position += Vector3.up * _jumpHeight;
+            _rb.AddForce(Vector3.up * _jumpHeight, ForceMode.Impulse);
+        }
+        #region Jump without Rigidbody
+        //if (Input.GetButtonDown("Jump"))
+        //{
+        //    transform.position += Vector3.up * _jumpHeight;
+        //}
+        #endregion
+    }
+
+    private void UseRaycast()
+    {
+        if (Physics.Raycast(_spawnWeaponPoint.position, transform.forward, out RaycastHit hit))
+        {
+            Debug.Log(hit.collider.name);
         }
     }
 }

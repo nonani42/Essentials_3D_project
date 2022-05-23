@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class Player : Character
 {
+
     private void Awake()
     {
-        Health = 10f;
         Guard = 10f;
+        Health = 10f;
     }
     void Start()
     {

@@ -7,8 +7,11 @@ public abstract class WeaponAmmo : MonoBehaviour
 {
     protected float _lifespan;
     protected float _speed;
+    protected float _rotationspeed;
+    protected Vector3 _rotationVector;
     protected float _damage;
     protected Character _target;
+    protected Rigidbody _rb;
 
 
     protected void Start()
@@ -28,13 +31,15 @@ public abstract class WeaponAmmo : MonoBehaviour
         if (_target != null) 
         {
             DoDamage();
-            Destroy(gameObject);
         }
+        LeaveImpact();
     }
 
     protected void Move()
     {
-        transform.Translate(Vector3.forward * _speed * Time.fixedDeltaTime);
+        _rb.AddForce(transform.forward * _speed);
+        transform.GetChild(0).Rotate(_rotationVector * _rotationspeed, Space.Self);
+        //transform.Translate(Vector3.forward * _speed * Time.fixedDeltaTime, Space.Self); //движение без Rigidbody
     }
 
     protected void DoDamage()
@@ -46,5 +51,11 @@ public abstract class WeaponAmmo : MonoBehaviour
             _target.Guard = 0;
         }
         _target = null;
+    }
+
+    protected void LeaveImpact()
+    {
+        //дописать эффект: при коллизии с полом, стенами и т.д. оставлять след
+        Destroy(gameObject);
     }
 }
