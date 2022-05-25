@@ -12,7 +12,7 @@ public abstract class Character : MonoBehaviour
     public float Health { get => health; set => health = value; }
     public float Guard { get => guard; set => guard = value; }
 
-    protected void Die()
+    protected virtual void Die()
     {
         if (health <= 0)
         {

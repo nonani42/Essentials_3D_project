@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private ObjManager manager;
     private Transform camTransform;
     private Rigidbody _rb;
+    private Animator _anim;
 
     private float _speed;
     private float _sprint;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
         manager = FindObjectOfType<ObjManager>();
         camTransform = FindObjectOfType<CamController>().transform;
         _rb = GetComponent<Rigidbody>();
+        _anim = GetComponent<Animator>();
         rotationSpeed = 720f;
         _speed = 5f;
         _sprint = 1f;
@@ -34,7 +36,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Update()
     {
-        Fire();
+        CheckFire();
         Jump();
     }
     public void FixedUpdate()
@@ -46,6 +48,14 @@ public class PlayerController : MonoBehaviour
 
     private void Walk()
     {
+        if(_direction != Vector3.zero) 
+        { 
+            _anim.SetBool("isMove", true); 
+        }
+        else
+        {
+            _anim.SetBool("isMove", false);
+        }
         _camPosition = new Vector3(camTransform.position.x, transform.position.y, camTransform.position.z); //без учета высоты камеры
         _camDirection = transform.position - _camPosition; //убираем наклон игрока из-за наклона камеры
         _horizontalInput = camTransform.right * Input.GetAxis("Horizontal");
@@ -73,12 +83,21 @@ public class PlayerController : MonoBehaviour
         #endregion
     }
 
-    public void Fire()
+    public void CheckFire()
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            manager.Spawn(Tags.snowball, _spawnWeaponPoint);
+            _anim.SetBool("Shoot", true);
         }
+        else
+        {
+            _anim.SetBool("Shoot", false);
+        }
+    }
+
+    private void Fire()
+    {
+        manager.Spawn(Tags.snowball, _spawnWeaponPoint);
     }
 
     private void CheckSprint()

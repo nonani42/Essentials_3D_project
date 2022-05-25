@@ -11,8 +11,12 @@ public class ObjManager : MonoBehaviour
     [SerializeField] GameObject _enemy;
     [SerializeField] GameObject _snowball;
     [SerializeField] GameObject _suriken;
+    [SerializeField] GameObject _pickupHeal;
+
     [SerializeField] Transform _playerPoint;
     [SerializeField] Transform[] _enemyPoint;
+    [SerializeField] Transform[] _pickupPoint;
+
 
     static Dictionary<Tags, GameObject> _prefabsDic;
     static List<GameObject> _spawnedObjectsList;
@@ -41,6 +45,8 @@ public class ObjManager : MonoBehaviour
         _prefabsDic.Add(Tags.enemyFlower, _enemy);
         _prefabsDic.Add(Tags.snowball, _snowball);
         _prefabsDic.Add(Tags.suriken, _suriken);
+        _prefabsDic.Add(Tags.heal, _pickupHeal);
+
     }
 
     public void Spawn(Tags tag, Transform position)
@@ -87,6 +93,10 @@ public class ObjManager : MonoBehaviour
         foreach(var point in _enemyPoint)
         {
             Spawn(Tags.enemyFlower, point);
+        }
+        foreach (var point in _pickupPoint)
+        {
+            Spawn(Tags.heal, point);
         }
     }
 
@@ -166,7 +176,9 @@ public enum Tags
     enemyTree, 
     enemyBush,
     snowball,
-    suriken
+    suriken,
+    heal
+
 }
 
 public enum WaypointsType

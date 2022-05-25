@@ -27,6 +27,7 @@ public abstract class WeaponAmmo : MonoBehaviour
     protected void OnCollisionEnter(Collision collision)
     {
         _target = collision.gameObject.GetComponent<Character>();
+        //попробовать проверку наследования прописать так: Debug.Log(interactiveObject is GoodBonus);
         //collision.gameObject.GetType().BaseType.IsAssignableFrom(typeof(Character)) - не проверяет на наследование от базового класса, от любого коллайдера возвращает true
         if (_target != null) 
         {
