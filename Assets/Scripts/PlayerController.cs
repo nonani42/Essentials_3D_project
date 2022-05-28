@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     private Transform camTransform;
     private Rigidbody _rb;
     private Animator _anim;
+    private HUD _hud;
+    private Player _player;
+
 
     private float _speed;
     private float _sprint;
@@ -21,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _horizontalInput;
     private Vector3 _verticalInput;
 
-    public float rotationSpeed;
+    private float rotationSpeed;
 
     private void Awake()
     {
@@ -33,6 +36,8 @@ public class PlayerController : MonoBehaviour
         _speed = 5f;
         _sprint = 1f;
         _jumpHeight = 240f;
+        _player = GetComponent<Player>();
+        _hud = GameObject.FindGameObjectWithTag("HUD").GetComponent<HUD>();
     }
     public void Update()
     {
@@ -98,6 +103,8 @@ public class PlayerController : MonoBehaviour
     private void Fire()
     {
         manager.Spawn(Tags.snowball, _spawnWeaponPoint);
+        _player.SnowballCount--;
+        _hud.ChangeText();
     }
 
     private void CheckSprint()

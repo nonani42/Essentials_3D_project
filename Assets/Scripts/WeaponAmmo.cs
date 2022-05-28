@@ -12,6 +12,7 @@ public abstract class WeaponAmmo : MonoBehaviour
     protected float _damage;
     protected Character _target;
     protected Rigidbody _rb;
+    protected HUD _hud;
 
 
     protected void Start()
@@ -32,6 +33,10 @@ public abstract class WeaponAmmo : MonoBehaviour
         if (_target != null) 
         {
             DoDamage();
+            if (collision.gameObject.GetComponent<Player>())
+            {
+                _hud.ChangeSliders();
+            }
         }
         LeaveImpact();
     }

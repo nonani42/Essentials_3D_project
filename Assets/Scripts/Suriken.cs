@@ -10,5 +10,6 @@ public class Suriken : WeaponAmmo
         _rotationspeed = 300000f;
         _rotationVector = Vector3.up;
         _damage = 4f;
+        _hud = GameObject.FindGameObjectWithTag("HUD").GetComponent<HUD>();
     }
 }

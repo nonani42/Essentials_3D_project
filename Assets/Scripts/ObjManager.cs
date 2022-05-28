@@ -177,8 +177,9 @@ public enum Tags
     enemyBush,
     snowball,
     suriken,
-    heal
-
+    heal,
+    shield,
+    spareAmmo
 }
 
 public enum WaypointsType
