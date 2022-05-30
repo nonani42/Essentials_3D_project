@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform _spawnWeaponPoint;
+    [SerializeField] private AudioSource _audioSteps;
+    [SerializeField] private AudioSource _audioThrow;
+    [SerializeField] private AudioClip[] _steps;
     private ObjManager manager;
     private Transform camTransform;
     private Rigidbody _rb;
@@ -105,6 +106,7 @@ public class PlayerController : MonoBehaviour
         manager.Spawn(Tags.snowball, _spawnWeaponPoint);
         _player.SnowballCount--;
         _hud.ChangeText();
+        _audioThrow.Play();
     }
 
     private void CheckSprint()
@@ -132,5 +134,11 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log(hit.collider.name);
         }
+    }
+
+    private void PlaySteps()
+    {
+        _audioSteps.clip = _steps[Random.Range(0, _steps.Length)];
+        _audioSteps.Play();
     }
 }

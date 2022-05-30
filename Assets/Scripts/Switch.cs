@@ -5,22 +5,14 @@ using UnityEngine;
 public class Switch : MonoBehaviour
 {
     [SerializeField] GameObject _bridge;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] ParticleSystem _particleSys;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Player>() != null)
         {
             _bridge.SetActive(true);
+            _particleSys.Stop();
         }
     }
 }
